@@ -1,8 +1,6 @@
 package life.majiang.community.community.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @author lijing
@@ -10,9 +8,7 @@ import lombok.ToString;
  * @discroption
  */
 
-@Setter
-@Getter
-@ToString
+@Data
 public class AccessTokenDTO {
     private String client_id;
     private String client_secret;

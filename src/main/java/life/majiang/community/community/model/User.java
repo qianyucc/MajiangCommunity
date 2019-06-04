@@ -1,17 +1,13 @@
 package life.majiang.community.community.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @author lijing
  * @date 2019-05-29-11:28
  * @discroption
  */
-@Setter
-@Getter
-@ToString
+@Data
 public class User {
     private Integer id;
     private String name;
@@ -19,4 +15,5 @@ public class User {
     private String token;
     private Long gmtCreate;
     private Long gmtModified;
+    private String avatarUrl;
 }

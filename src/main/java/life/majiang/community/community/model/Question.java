@@ -1,17 +1,13 @@
 package life.majiang.community.community.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * @author lijing
  * @date 2019-06-01-15:48
  * @discroption
  */
-@Getter
-@Setter
-@ToString
+@Data
 public class Question {
     private Integer id;
     private String title;
