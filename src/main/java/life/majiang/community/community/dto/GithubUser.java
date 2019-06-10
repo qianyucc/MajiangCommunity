@@ -12,5 +12,6 @@ public class GithubUser {
     private String  name;
     private Long id;
     private String bio;
-    private String avatar_url;
+    //fastJson可以自动映射为驼峰
+    private String avatarUrl;
 }
