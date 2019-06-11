@@ -23,8 +23,13 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
-    public List<QuestionDTO> list() {
-        List<Question> questionList = questionMapper.list();
+    public PageInfoDTO list(Integer page, Integer size) {
+        //计算offset和size
+        Integer offset = size * (page - 1);
+
+        List<Question> questionList = questionMapper.list(offset, size);
+        PageInfoDTO pageInfoDTO = new PageInfoDTO();
+
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : questionList) {
             User user = userMapper.findById(question.getCreator());
@@ -33,6 +38,10 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
-        return questionDTOS;
+
+        pageInfoDTO.setQuestions(questionDTOS);
+        Integer totalCount = questionMapper.count();
+        pageInfoDTO.setPageInfo(totalCount, page, size);
+        return pageInfoDTO;
     }
 }

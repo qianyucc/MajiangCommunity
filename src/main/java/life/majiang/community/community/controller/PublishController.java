@@ -42,12 +42,12 @@ public class PublishController {
             HttpServletRequest request,
             Model model) {
 
-//        回显
+        //回显
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
 
-//        非空校验
+        //非空校验
         if (title == null || title.equals("")) {
             model.addAttribute("error", "标题不能为空");
             return "publish";
@@ -87,6 +87,9 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         question.setCreator(user.getId());
+        question.setCommentCount(0);
+        question.setLikeCount(0);
+        question.setViewCount(0);
         questionMapper.insert(question);
         return "redirect:/";
     }
