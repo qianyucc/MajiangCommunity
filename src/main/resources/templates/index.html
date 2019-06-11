@@ -39,7 +39,8 @@
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
-                <li th:if="${session.user == null}"><a href="https://github.com/login/oauth/authorize?client_id=a0ed95dee88b2851dccf&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                <li th:if="${session.user == null}"><a
+                        href="https://github.com/login/oauth/authorize?client_id=a0ed95dee88b2851dccf&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
                 </li>
             </ul>
         </div>
@@ -71,15 +72,27 @@
             <!--分页-->
             <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
+                    <li th:if="${questionList.showFirstPage}">
+                        <a href="/?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
-                    <li><a th:each="page : ${questionList.pages}" th:text="${page}" th:href="@{/(page=${page})}"></a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
+                    <li th:if="${questionList.showPrevious}">
+                        <a th:href="@{/(page=${questionList.page}-1)}"  aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <li th:each="page : ${questionList.pages}" th:class="${questionList.page == page} ? 'active' : ''">
+                        <a  th:text="${page}" th:href="@{/(page=${page})}"></a>
+                    </li>
+                    <li th:if="${questionList.showNext}">
+                        <a th:href="@{/(page=${questionList.page}+1)}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${questionList.showEndPage}">
+                        <a th:href="@{/(page=${questionList.totalPage})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>
                 </ul>

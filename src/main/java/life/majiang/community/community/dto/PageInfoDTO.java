@@ -16,26 +16,35 @@ public class PageInfoDTO {
     private boolean showFirstPage;
     private boolean showEndPage;
     private boolean showNext;
+    private Integer totalPage;
 
     private Integer page;
-    private List<Integer> pages = new ArrayList<> ();
+    private List<Integer> pages = new ArrayList<>();
 
     public void setPageInfo(Integer totalCount, Integer page, Integer size) {
+
         // 计算总页数
-        Integer totalPage;
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
             totalPage = totalCount / size + 1;
         }
 
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        if (page < 0) {
+            page = 1;
+        }
+        this.page = page;
+
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             if (page - i > 0) {
-                pages.add(page - i, 0);
+                pages.add(0, page - i);
             }
-            if (page + i <= totalCount) {
-                pages.add(page + 1);
+            if (page + i <= totalPage) {
+                pages.add(page + i);
             }
         }
 

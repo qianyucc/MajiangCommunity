@@ -24,13 +24,26 @@ public class QuestionService {
     private QuestionMapper questionMapper;
 
     public PageInfoDTO list(Integer page, Integer size) {
+
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+
+        PageInfoDTO pageInfoDTO = new PageInfoDTO();
+        pageInfoDTO.setQuestions(questionDTOS);
+        Integer totalCount = questionMapper.count();
+        pageInfoDTO.setPageInfo(totalCount, page, size);
+
+        if (page < 0) {
+            page = 1;
+        }
+        if (page > pageInfoDTO.getTotalPage()) {
+            page = pageInfoDTO.getTotalPage();
+        }
+
         //计算offset和size
         Integer offset = size * (page - 1);
 
         List<Question> questionList = questionMapper.list(offset, size);
-        PageInfoDTO pageInfoDTO = new PageInfoDTO();
 
-        List<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : questionList) {
             User user = userMapper.findById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -39,9 +52,7 @@ public class QuestionService {
             questionDTOS.add(questionDTO);
         }
 
-        pageInfoDTO.setQuestions(questionDTOS);
-        Integer totalCount = questionMapper.count();
-        pageInfoDTO.setPageInfo(totalCount, page, size);
+
         return pageInfoDTO;
     }
 }
