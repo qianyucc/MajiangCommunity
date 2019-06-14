@@ -1,4 +1,4 @@
-package life.majiang.community.community.dto;
+package life.majiang.community.dto;
 
 import lombok.*;
 
@@ -21,22 +21,11 @@ public class PageInfoDTO {
     private Integer page;
     private List<Integer> pages = new ArrayList<>();
 
-    public void setPageInfo(Integer totalCount, Integer page, Integer size) {
+    public void setPageInfo(Integer totalPage, Integer page) {
 
-        // 计算总页数
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
-        } else {
-            totalPage = totalCount / size + 1;
-        }
 
-        if (page > totalPage) {
-            page = totalPage;
-        }
-        if (page < 0) {
-            page = 1;
-        }
         this.page = page;
+        this.totalPage = totalPage;
 
         pages.add(page);
         for (int i = 1; i <= 3; i++) {

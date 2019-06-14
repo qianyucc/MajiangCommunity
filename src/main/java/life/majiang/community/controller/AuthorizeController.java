@@ -1,21 +1,15 @@
-package life.majiang.community.community.controller;
+package life.majiang.community.controller;
 
-import life.majiang.community.community.dto.AccessTokenDTO;
-import life.majiang.community.community.dto.GithubUser;
-import life.majiang.community.community.mapper.UserMapper;
-import life.majiang.community.community.model.User;
-import life.majiang.community.community.provider.GithubProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import life.majiang.community.dto.*;
+import life.majiang.community.mapper.*;
+import life.majiang.community.model.*;
+import life.majiang.community.provider.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
+import javax.servlet.http.*;
+import java.util.*;
 
 /**
  * @author lijing

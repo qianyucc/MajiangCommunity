@@ -1,6 +1,6 @@
-package life.majiang.community.community.dto;
+package life.majiang.community.dto;
 
-import life.majiang.community.community.model.*;
+import life.majiang.community.model.*;
 import lombok.*;
 
 /**
