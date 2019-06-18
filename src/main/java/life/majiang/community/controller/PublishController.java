@@ -1,7 +1,9 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.dto.*;
 import life.majiang.community.mapper.*;
 import life.majiang.community.model.*;
+import life.majiang.community.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -18,7 +20,18 @@ import javax.servlet.http.*;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
+
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model) {
+        QuestionDTO question = questionService.getById(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
+        return "publish";
+    }
 
     @GetMapping("/publish")
     public String publish() {
@@ -30,6 +43,7 @@ public class PublishController {
             @RequestParam(name = "title", required = false) String title,
             @RequestParam(name = "description", required = false) String description,
             @RequestParam(name = "tag", required = false) String tag,
+            @RequestParam(name = "id", required = false) Integer id,
             HttpServletRequest request,
             Model model) {
 
@@ -65,10 +79,11 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         question.setCreator(user.getId());
+        question.setId(id);
         question.setCommentCount(0);
         question.setLikeCount(0);
         question.setViewCount(0);
-        questionMapper.insert(question);
+        questionService.insertOrUpdate(question);
         return "redirect:/";
     }
 }

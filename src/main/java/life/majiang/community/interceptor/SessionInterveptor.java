@@ -7,6 +7,7 @@ import org.springframework.stereotype.*;
 import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
+import java.util.*;
 
 /**
  * @author lijing
@@ -26,9 +27,12 @@ public class SessionInterveptor implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria()
+                            .andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }
