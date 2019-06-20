@@ -1,7 +1,6 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.dto.*;
-import life.majiang.community.mapper.*;
 import life.majiang.community.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;

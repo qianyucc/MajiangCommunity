@@ -1,6 +1,7 @@
 package life.majiang.community.service;
 
 import life.majiang.community.dto.*;
+import life.majiang.community.exception.*;
 import life.majiang.community.mapper.*;
 import life.majiang.community.model.*;
 import org.apache.ibatis.session.*;
@@ -25,7 +26,7 @@ public class QuestionService {
     private QuestionMapper questionMapper;
 
     public PageInfoDTO list(Integer page, Integer size) {
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         // 计算总页数
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -49,7 +50,7 @@ public class QuestionService {
         //计算offset和size
         Integer offset = size * (page - 1);
 
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset, size));
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         for (Question question : questionList) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -67,7 +68,7 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria()
                 .andCreatorEqualTo(id);
-        Integer totalCount = (int)questionMapper.countByExample(example);
+        Integer totalCount = (int) questionMapper.countByExample(example);
         // 计算总页数
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -109,6 +110,9 @@ public class QuestionService {
     public QuestionDTO getById(Integer id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
@@ -126,7 +130,10 @@ public class QuestionService {
             QuestionExample example = new QuestionExample();
             example.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updQuestion, example);
+            int res = questionMapper.updateByExampleSelective(updQuestion, example);
+            if (res != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         } else {
             // 添加
             questionMapper.insert(question);
