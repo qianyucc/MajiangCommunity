@@ -25,6 +25,9 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     public PageInfoDTO list(Integer page, Integer size) {
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         // 计算总页数
@@ -63,7 +66,7 @@ public class QuestionService {
         return pageInfoDTO;
     }
 
-    public PageInfoDTO list(Integer id, Integer page, Integer size) {
+    public PageInfoDTO list(Long id, Integer page, Integer size) {
 
         QuestionExample example = new QuestionExample();
         example.createCriteria()
@@ -107,7 +110,7 @@ public class QuestionService {
         return pageInfoDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
@@ -138,5 +141,16 @@ public class QuestionService {
             // 添加
             questionMapper.insert(question);
         }
+    }
+
+    /**
+     * 增加阅读数
+     * @param id
+     */
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setViewCount(1);
+        question.setId(id);
+        questionExtMapper.incView(question);
     }
 }
