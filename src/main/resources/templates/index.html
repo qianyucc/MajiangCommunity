@@ -10,8 +10,7 @@
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
     <script type="application/javascript">
         window.onload = function () {
-            debugger;
-            var item = window.localStorage.getItem("closable");
+            var item = window.localStorage["closable"];
             if(item == "true"){
                 window.close();
                 window.localStorage.removeItem("closable");

@@ -32,7 +32,7 @@ body {
     font-size: 13px;
 }
 
-.question-title{
+.question-title {
     margin-top: 25px;
 }
 
@@ -57,11 +57,28 @@ body {
     margin-top: 0;
 }
 
+.sub-comments {
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+    margin-bottom: 15px;
+}
+
+.sub-comments .btn {
+    margin: 10px 0;
+}
+
 .comment-menu {
+    margin-top: 6px;
     display: block;
     color: #999;
     font-size: 13px;
     max-resolution: 15px;
+}
+
+.comment-menu .active {
+    color: #499ef3;
 }
 
 .comments {
@@ -79,3 +96,4 @@ body {
 .comment-icon:hover {
     color: #499ef3;
 }
+
