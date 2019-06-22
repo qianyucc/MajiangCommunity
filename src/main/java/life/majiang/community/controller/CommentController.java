@@ -6,6 +6,7 @@ import life.majiang.community.mapper.*;
 import life.majiang.community.model.*;
 import life.majiang.community.service.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.*;
@@ -16,12 +17,13 @@ import javax.servlet.http.*;
  * @date 2019-06-21-15:35
  * @discroption
  */
-@RestController
+@Controller
 public class CommentController {
 
     @Autowired
     private CommentService commentService;
 
+    @ResponseBody
     @PostMapping("/comment")
     public Object post(@RequestBody CommentDTO commentDTO,
                        HttpServletRequest request) {

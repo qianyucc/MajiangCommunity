@@ -24,7 +24,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 
     @Override

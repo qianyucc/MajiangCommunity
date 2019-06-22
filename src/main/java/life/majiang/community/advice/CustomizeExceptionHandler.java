@@ -21,13 +21,13 @@ public class CustomizeExceptionHandler {
     ModelAndView handle(HttpServletRequest request,
                         HttpServletResponse response,
                         Throwable ex,
-                        Model model){
+                        Model model) {
         String contentType = request.getContentType();
         ResultDTO resultDTO = null;
-        if(contentType.equals("application/json")){
-            if(ex instanceof CustomizeException){
-                resultDTO = ResultDTO.errorOf((ICustomizeErrorCode) ex);
-            }else{
+        if (contentType != null && contentType.equals("application/json")) {
+            if (ex instanceof CustomizeException) {
+                resultDTO = ResultDTO.errorOf((CustomizeException) ex);
+            } else {
                 resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
 
@@ -40,15 +40,15 @@ public class CustomizeExceptionHandler {
                 writer.write(JSON.toJSONString(resultDTO));
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 writer.close();
             }
 
             return null;
-        }else{
-            if(ex instanceof CustomizeException){
+        } else {
+            if (ex instanceof CustomizeException) {
                 model.addAttribute("message", ex.getMessage());
-            }else{
+            } else {
                 model.addAttribute("message", CustomizeErrorCode.SYS_ERROR.getMessage());
             }
             return new ModelAndView("error");

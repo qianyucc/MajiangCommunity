@@ -1,12 +1,14 @@
 package life.majiang.community.dto;
 
 import life.majiang.community.exception.*;
+import lombok.*;
 
 /**
  * @author lijing
  * @date 2019-06-21-15:54
  * @discroption
  */
+@Data
 public class ResultDTO {
     private Integer code;
     private String message;
@@ -23,16 +25,10 @@ public class ResultDTO {
     }
 
     public static ResultDTO okOf() {
-        ResultDTO resultDTO = new ResultDTO();
-        resultDTO.code = 200;
-        resultDTO.message = "操作成功";
-        return resultDTO;
+        return errorOf(200,"操作成功");
     }
 
-    public static ResultDTO errorOf(ICustomizeErrorCode ex) {
-        ResultDTO resultDTO = new ResultDTO();
-        resultDTO.code = ex.getCode();
-        resultDTO.message = ex.getMessage();
-        return resultDTO;
+    public static ResultDTO errorOf(CustomizeException ex) {
+        return errorOf(ex.getCode(),ex.getMessage());
     }
 }
