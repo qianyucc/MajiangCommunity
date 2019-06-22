@@ -2,9 +2,9 @@ package life.majiang.community.controller;
 
 import life.majiang.community.dto.*;
 import life.majiang.community.exception.*;
-import life.majiang.community.mapper.*;
 import life.majiang.community.model.*;
 import life.majiang.community.service.*;
+import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +25,21 @@ public class CommentController {
 
     @ResponseBody
     @PostMapping("/comment")
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
 
+        if(commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())){
+            return ResultDTO.errorOf(CustomizeErrorCode.COMMENT_CONTENT_NULL);
+        }
+
         Comment comment = new Comment();
-        comment.setParentId(commentDTO.getParentId());
-        comment.setType(commentDTO.getType());
-        comment.setContent(commentDTO.getContent());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setType(commentCreateDTO.getType());
+        comment.setContent(commentCreateDTO.getContent());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setCommentator(user.getId());
