@@ -29,7 +29,9 @@ public class QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     public PageInfoDTO list(Integer page, Integer size) {
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gnt_create desc");
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         // 计算总页数
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -71,6 +73,7 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria()
                 .andCreatorEqualTo(id);
+        example.setOrderByClause("gmt_create desc");
         Integer totalCount = (int) questionMapper.countByExample(example);
         // 计算总页数
         Integer totalPage;

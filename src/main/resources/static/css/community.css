@@ -97,3 +97,6 @@ body {
     color: #499ef3;
 }
 
+.glyphicon-comment:before {
+    margin-right: 5px;
+}

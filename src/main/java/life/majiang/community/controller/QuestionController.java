@@ -1,13 +1,13 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.dto.*;
+import life.majiang.community.enums.*;
 import life.majiang.community.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.*;
 import java.util.*;
 
 /**
@@ -28,7 +28,7 @@ public class QuestionController {
     public String question(@PathVariable("id") Long id,
                            Model model){
         QuestionDTO questionDTO = questionService.getById(id);
-        List<CommentDTO> comments =  commentService.listByQuestionId(id);
+        List<CommentDTO> comments =  commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
         // 增加阅读数
         questionService.incView(id);
