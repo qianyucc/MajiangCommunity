@@ -4,12 +4,14 @@ import life.majiang.community.dto.*;
 import life.majiang.community.exception.*;
 import life.majiang.community.mapper.*;
 import life.majiang.community.model.*;
+import org.apache.commons.lang3.*;
 import org.apache.ibatis.session.*;
 import org.springframework.beans.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * @author lijing
@@ -29,9 +31,7 @@ public class QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     public PageInfoDTO list(Integer page, Integer size) {
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gnt_create desc");
-        Integer totalCount = (int) questionMapper.countByExample(questionExample);
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         // 计算总页数
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -54,8 +54,9 @@ public class QuestionService {
 
         //计算offset和size
         Integer offset = size * (page - 1);
-
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         for (Question question : questionList) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -148,6 +149,7 @@ public class QuestionService {
 
     /**
      * 增加阅读数
+     *
      * @param id
      */
     public void incView(Long id) {
@@ -155,5 +157,23 @@ public class QuestionService {
         question.setViewCount(1);
         question.setId(id);
         questionExtMapper.incView(question);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        if (StringUtils.isBlank(questionDTO.getTag())) {
+            return new ArrayList<>();
+        }
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(questionDTO.getTag().replace(',', '|'));
+
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOList = questions.stream().map(q -> {
+            QuestionDTO qDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, qDTO);
+            qDTO.setUser(userMapper.selectByPrimaryKey(q.getCreator()));
+            return qDTO;
+        }).collect(Collectors.toList());
+        return questionDTOList;
     }
 }
