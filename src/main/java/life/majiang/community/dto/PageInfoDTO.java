@@ -10,8 +10,8 @@ import java.util.*;
  * @discroption 储存分页信息
  */
 @Data
-public class PageInfoDTO {
-    private List<QuestionDTO> questions;
+public class PageInfoDTO<T> {
+    private List<T> data;
     private boolean showPrevious;
     private boolean showFirstPage;
     private boolean showEndPage;

@@ -77,13 +77,13 @@ function collapseComments(e) {
             e.setAttribute("data-collapse", "in");
             // 追加标签
             // 格式化日期
-            Vue.filter('dateformat', function(dataStr) {
+            Vue.filter('dateformat', function (dataStr) {
                 return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
             });
             var app = new Vue({
                 el: "#comment-" + id,
                 data: {
-                    code:resp.code,
+                    code: resp.code,
                     items: resp.data
                 }
             });
@@ -91,4 +91,24 @@ function collapseComments(e) {
     }
 }
 
-
+/**
+ * 展开标签
+ */
+function showSelectTag() {
+    $("#select-tag").show();
+}
+/**
+ * 将选中的标签填到输入框中
+ * @param e
+ */
+function selectTag(e) {
+    var value = e.getAttribute("data-tag");
+    var previous = $("#tagText").val();
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $("#tagText").val(previous + ',' + value);
+        } else {
+            $("#tagText").val(value);
+        }
+    }
+}

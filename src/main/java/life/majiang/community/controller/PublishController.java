@@ -1,8 +1,10 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.cache.*;
 import life.majiang.community.dto.*;
 import life.majiang.community.model.*;
 import life.majiang.community.service.*;
+import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -29,11 +31,13 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -50,6 +54,7 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tags", TagCache.get());
 
         //非空校验
         if (title == null || title.equals("")) {
@@ -62,6 +67,10 @@ public class PublishController {
         }
         if (tag == null || tag.equals("")) {
             model.addAttribute("error", "标签不能为空");
+            return "publish";
+        }
+        if (StringUtils.isNotBlank(TagCache.filterInvalid(tag))) {
+            model.addAttribute("error", "含有非法标签");
             return "publish";
         }
 

@@ -1,7 +1,9 @@
 package life.majiang.community.interceptor;
 
+import life.majiang.community.enums.*;
 import life.majiang.community.mapper.*;
 import life.majiang.community.model.*;
+import life.majiang.community.service.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.servlet.*;
@@ -20,6 +22,9 @@ public class SessionInterveptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -32,7 +37,10 @@ public class SessionInterveptor implements HandlerInterceptor {
                             .andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0) {
-                        request.getSession().setAttribute("user", users.get(0));
+                        User user = users.get(0);
+                        request.getSession().setAttribute("user", user);
+                        long unreadNotificationCount = notificationService.getUnreadNotificationCount(user);
+                        request.getSession().setAttribute("unreadNotificationCount", unreadNotificationCount);
                     }
                     break;
                 }
@@ -40,6 +48,8 @@ public class SessionInterveptor implements HandlerInterceptor {
         }
         return true;
     }
+
+
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {

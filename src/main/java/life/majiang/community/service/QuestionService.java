@@ -48,8 +48,8 @@ public class QuestionService {
 
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
-        PageInfoDTO pageInfoDTO = new PageInfoDTO();
-        pageInfoDTO.setQuestions(questionDTOS);
+        PageInfoDTO<QuestionDTO> pageInfoDTO = new PageInfoDTO();
+        pageInfoDTO.setData(questionDTOS);
         pageInfoDTO.setPageInfo(totalPage, page);
 
         //计算offset和size
@@ -74,7 +74,6 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria()
                 .andCreatorEqualTo(id);
-        example.setOrderByClause("gmt_create desc");
         Integer totalCount = (int) questionMapper.countByExample(example);
         // 计算总页数
         Integer totalPage;
@@ -91,8 +90,8 @@ public class QuestionService {
         }
 
         List<QuestionDTO> questionDTOS = new ArrayList<>();
-        PageInfoDTO pageInfoDTO = new PageInfoDTO();
-        pageInfoDTO.setQuestions(questionDTOS);
+        PageInfoDTO<QuestionDTO> pageInfoDTO = new PageInfoDTO();
+        pageInfoDTO.setData(questionDTOS);
         pageInfoDTO.setPageInfo(totalPage, page);
 
         //计算offset和size
@@ -101,6 +100,7 @@ public class QuestionService {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
                 .andCreatorEqualTo(id);
+        questionExample.setOrderByClause("gmt_create desc");
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
 
         for (Question question : questionList) {
