@@ -2,6 +2,7 @@ package life.majiang.community.provider;
 
 import com.alibaba.fastjson.JSON;
 import life.majiang.community.dto.*;
+import lombok.extern.slf4j.*;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
  * @discroption
  */
 @Component
+@Slf4j
 public class GithubProvider {
     public static final MediaType MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
@@ -46,6 +48,7 @@ public class GithubProvider {
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (IOException e) {
+            log.info("获取GitHub用户失败");
             e.printStackTrace();
         }
         return null;
